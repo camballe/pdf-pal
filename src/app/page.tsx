@@ -19,7 +19,7 @@ export default function Home() {
         <Link className={buttonVariants({
           size: "lg",
           className: "mt-5"
-        })} href="/dashboard" target="_blank">Get Started <ArrowRight className="ml-2 h-5 w-5" /></Link>
+        })} href="/dashboard">Get Started <ArrowRight className="ml-2 h-5 w-5" /></Link>
       </MaxWidthWrapper>
 
       {/* value proposition section */}
