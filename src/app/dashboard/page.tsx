@@ -2,8 +2,9 @@ import React from 'react'
 import { EmailAddress, auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
+import Dashboard from '@/components/Dashboard';
 
-const Dashboard = async () => {
+const DashboardPage = async () => {
 
     const user = await currentUser()
 
@@ -16,8 +17,8 @@ const Dashboard = async () => {
     if (!dbUser) redirect("/auth-callback?origin=dashboard")
 
     return (
-        <div>Email: {user?.primaryEmailAddress?.emailAddress} </div>
+        <Dashboard />
     )
 }
 
-export default Dashboard
+export default DashboardPage
