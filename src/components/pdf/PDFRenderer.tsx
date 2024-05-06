@@ -4,14 +4,14 @@ import { ChevronDown, ChevronLeft, ChevronRight, Loader2, RotateCw, Search, Tria
 import { Document, Page, pdfjs } from "react-pdf"
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { useResizeDetector } from "react-resize-detector"
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import SimpleBar from "simplebar-react"
 import PDFFullScreen from "./PDFFullScreen";
 import { cn } from "@/lib/utils";

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import UploadButton from './UploadButton'
+import UploadButton from './pdf/UploadButton'
 import { trpc } from '@/app/_trpc/client'
 import { File, FileClock, Ghost, Loader2, MessageSquare, Paperclip, Plus, Trash } from 'lucide-react'
 import Image from 'next/image'

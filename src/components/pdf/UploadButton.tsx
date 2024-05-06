@@ -1,12 +1,12 @@
 "use client"
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
-import { Button } from './ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import { Button } from '../ui/button'
 import Dropzone from "react-dropzone"
 import { Cloud, CloudUpload, File, Loader2 } from 'lucide-react'
-import { Progress } from './ui/progress'
+import { Progress } from '../ui/progress'
 import { useUploadThing } from '@/lib/uploadthing'
-import { useToast } from './ui/use-toast'
+import { useToast } from '../ui/use-toast'
 import { trpc } from '@/app/_trpc/client'
 import { useRouter } from 'next/navigation'
 
@@ -82,7 +82,7 @@ const UploadDropzone = () => {
                             <p className='mb-2 text-sm text-zinc-700'>
                                 <span className="font-semibold">Click to upload</span>{' '} or drag and drop
                             </p>
-                            <p className='text-xs text-zinc-500'>PDF (up to 8MB)</p>
+                            <p className='text-xs text-zinc-500'>PDF (up to 4MB)</p>
                         </div>
 
                         {acceptedFiles && acceptedFiles[0] ? (
