@@ -14,9 +14,10 @@ datasource db {
 }
 
 model User {
-  id    String @id @unique // matches clerk user id
-  email String @unique
-  File  File[]
+  id       String    @id @unique // matches clerk user id
+  email    String    @unique
+  Files    File[]
+  Messages Message[]
 }
 
 enum UploadStatus {
@@ -36,4 +37,17 @@ model File {
   updatedAt    DateTime     @updatedAt
   User         User?        @relation(fields: [userId], references: [id])
   userId       String?
+  Messages     Message[]
+}
+
+model Message {
+  id            String   @id @default(cuid())
+  text          String   @db.Text()
+  isUserMessage Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  File          File?    @relation(fields: [fileId], references: [id])
+  fileId        String?
 }
