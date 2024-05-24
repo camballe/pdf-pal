@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { pinecone } from "@/lib/pinecone";
 
@@ -35,12 +35,9 @@ export const ourFileRouter = {
         const loader = new PDFLoader(blob);
 
         const pageLevelDocs = await loader.load();
-
         const numberOfPages = pageLevelDocs.length;
 
-        // vectorize and index entire document
-
-        const pineconeIndex = pinecone.Index("pdf-pal");
+        const pineconeIndex = pinecone.index("pdf-pal");
 
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,
@@ -60,6 +57,7 @@ export const ourFileRouter = {
           },
         });
       } catch (error) {
+        console.log("ERROR", error);
         await db.file.update({
           data: {
             uploadStatus: "FAILED",
