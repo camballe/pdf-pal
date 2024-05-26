@@ -1,4 +1,5 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import SubscribeButton from '@/components/SubscribeButton'
 import { buttonVariants } from '@/components/ui/button'
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -210,10 +211,10 @@ const PricingPage = async () => {
                                         className: "w-full",
                                         variant: "secondary"
                                     })}>
-                                        {user ? "Continue" : "Sign up"}
+                                        {user ? "Continue for free" : "Sign up"}
                                         <ArrowRight className="h-5 w-5 ml-1.5" />
                                     </Link>) : user ? (
-                                        <></>
+                                        <SubscribeButton />
                                     ) : (<Link href="/sign-in" className={buttonVariants({
                                         className: "w-full"
                                     })}>
