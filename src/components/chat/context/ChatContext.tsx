@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import React, { ReactNode, createContext, useRef, useState } from "react";
 import { trpc } from "@/app/_trpc/client";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
-import BASE_URL from "/@config/baseUrl"
+import BASE_URL from "@/config/baseUrl"
 
 type StreamResponse = {
     addMessage: () => void,
