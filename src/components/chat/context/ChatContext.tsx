@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import React, { ReactNode, createContext, useRef, useState } from "react";
 import { trpc } from "@/app/_trpc/client";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
+import BASE_URL from "/@config/baseUrl"
 
 type StreamResponse = {
     addMessage: () => void,
@@ -35,7 +36,7 @@ export const ChatContextProvider = ({ fileId, children }: ProviderProps) => {
 
     const { mutate: sendMessage } = useMutation({
         mutationFn: async ({ message }: { message: string }) => {
-            const response = await fetch("/api/message", {
+            const response = await fetch(`${BASE_URL}/api/message`, {
                 method: "POST",
                 body: JSON.stringify({
                     fileId,
