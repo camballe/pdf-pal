@@ -1,4 +1,4 @@
-let BASE_URL = "https://pdfpal.enkambale.com";
+let BASE_URL = "";
 
 switch (process.env.NODE_ENV) {
   case "development":
