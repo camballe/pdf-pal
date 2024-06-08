@@ -1,9 +1,16 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { privateProcedure, publicProcedure, router } from "./trpc";
+import {
+  paypalProcedure,
+  privateProcedure,
+  publicProcedure,
+  router,
+} from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { db } from "@/db";
 import { z } from "zod";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { CreatedSubscription, SubscriptionDetails } from "@/types/paypal";
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -27,6 +34,144 @@ export const appRouter = router({
 
     return { success: true };
   }),
+
+  createPaypalSubscriptionOrder: paypalProcedure
+    .input(z.object({ planId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { paypalAccessToken } = ctx;
+      const { planId } = input;
+
+      try {
+        const config: AxiosRequestConfig = {
+          method: "post",
+          url: `${process.env.PAYPAL_BASE_URL!}/v1/billing/subscriptions`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${paypalAccessToken}`,
+            Accept: "application/json",
+            Prefer: "return=representation",
+          },
+          data: {
+            plan_id: planId,
+            application_context: {
+              user_action: "SUBSCRIBE_NOW",
+            },
+          },
+        };
+
+        const response: AxiosResponse = await axios(config);
+
+        return {
+          data: <CreatedSubscription>response.data,
+        };
+      } catch (error: any) {
+        console.error("Failed to create order:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create order!",
+        });
+      }
+    }),
+
+  approvePaypalSubscriptionOrder: paypalProcedure
+    .input(
+      z.object({
+        paypalPlanId: z.string(),
+        paypalSubscriptionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userId, paypalAccessToken } = ctx;
+      const { paypalPlanId, paypalSubscriptionId } = input;
+
+      try {
+        if (!paypalSubscriptionId) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "No subscription id!",
+          });
+        }
+
+        const config: AxiosRequestConfig = {
+          method: "get",
+          url: `${process.env
+            .PAYPAL_BASE_URL!}/v1/billing/subscriptions/${paypalSubscriptionId}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${paypalAccessToken}`,
+            Accept: "application/json",
+          },
+        };
+
+        const response: AxiosResponse = await axios(config);
+
+        const subscriptionDetails: SubscriptionDetails = response.data;
+
+        await db.user.update({
+          where: { id: userId },
+          data: {
+            paypalPayerId: subscriptionDetails.subscriber.payer_id,
+            paypalPlanId,
+            paypalSubscriptionId,
+            paypalNextBillingTime:
+              subscriptionDetails.billing_info.next_billing_time,
+          },
+        });
+
+        return {
+          message: "Subscription successful!",
+        };
+      } catch (error) {
+        console.error("Error approving order:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error approving order!",
+        });
+      }
+    }),
+
+  getPaypalSubscriptionDetails: paypalProcedure
+    .input(
+      z.object({
+        paypalSubscriptionId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { paypalAccessToken } = ctx;
+      const { paypalSubscriptionId } = input;
+      try {
+ if (!paypalSubscriptionId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No subscription id!",
+        });
+      }
+
+      const config: AxiosRequestConfig = {
+        method: "get",
+        url: `${process.env
+          .PAYPAL_BASE_URL!}/v1/billing/subscriptions/${paypalSubscriptionId}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${paypalAccessToken}`,
+          Accept: "application/json",
+        },
+      };
+
+      const response: AxiosResponse = await axios(config);
+
+      return {
+        data: <SubscriptionDetails>response.data,
+      };
+      } catch (error) {
+        console.error("Error getting subscription details:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error getting subscription details!",
+        });
+      }
+     
+    }),
 
   getUserFiles: privateProcedure.query(async ({ ctx }) => {
     const { userId, user } = ctx;

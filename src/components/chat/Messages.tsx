@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton'
 import Message from './Message'
 import { ChatContext } from './context/ChatContext'
 import { useIntersection } from "@mantine/hooks"
+import Typing from './Typing'
 
 interface MessagesProps {
     fileId: string
@@ -29,7 +30,7 @@ const Messages = ({ fileId }: MessagesProps) => {
         id: "loading-message",
         isUserMessage: false,
         text: (<span className="flex h-full items-center justify-center">
-            <Loader2 className='h-4 w-4 animate-spin' />
+            <Typing />
         </span>)
     }
 
@@ -56,11 +57,11 @@ const Messages = ({ fileId }: MessagesProps) => {
             {combinedMessages && combinedMessages.length > 0 ? (
                 combinedMessages.map((message, i) => {
 
-                    const isNextMessageSamePerson = combinedMessages[i - 1]?.isUserMessage === combinedMessages[i]?.isUserMessage
+                    const isNextMessageFromSamePerson = combinedMessages[i - 1]?.isUserMessage === combinedMessages[i]?.isUserMessage
 
                     if (i === combinedMessages.length - 1) {
-                        return <Message ref={ref} message={message} isNextMessageSamePerson={isNextMessageSamePerson} key={message.id} />
-                    } else return <Message message={message} isNextMessageSamePerson={isNextMessageSamePerson} key={message.id} />
+                        return <Message ref={ref} message={message} isNextMessageFromSamePerson={isNextMessageFromSamePerson} key={message.id} />
+                    } else return <Message message={message} isNextMessageFromSamePerson={isNextMessageFromSamePerson} key={message.id} />
                 })
             ) : isLoading ? (<div className="w-full flex flex-col gap-2">
                 <Skeleton className='h-16' />

@@ -2,6 +2,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import SubscribeButton from '@/components/SubscribeButton'
 import { buttonVariants } from '@/components/ui/button'
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { PLANS } from '@/config/paypalPlans'
 import { cn } from '@/lib/utils'
 import { currentUser } from '@clerk/nextjs/server'
 import { ArrowRight, Check, CheckIcon, CrossIcon, HelpCircle, X } from 'lucide-react'
@@ -18,7 +19,7 @@ const PricingPage = async () => {
             price: 0,
             features: [
                 {
-                    text: '30 pages per PDF',
+                    text: '50 pages per PDF',
                     footnote: 'The maximum amount of pages per PDF file.',
                 },
                 {
@@ -30,23 +31,21 @@ const PricingPage = async () => {
                 },
                 {
                     text: 'Higher-quality responses',
-                    footnote: 'Better algorithmic responses for enhanced content quality',
+                    footnote: 'Better responses from the Large Language Model',
                     negative: true,
                 },
-                {
-                    text: 'Priority support',
-                    negative: true,
-                },
+
             ],
-            quota: 10,
+            quota: 5,
+            planId: PLANS[0].planId
         },
         {
             plan: 'Basic',
             tagline: 'For regular users with moderate needs.',
-            price: 1.99,
+            price: 4.99,
             features: [
                 {
-                    text: '60 pages per PDF',
+                    text: '150 pages per PDF',
                     footnote: 'The maximum amount of pages per PDF file.',
                 },
                 {
@@ -58,23 +57,21 @@ const PricingPage = async () => {
                 },
                 {
                     text: 'Higher-quality responses',
-                    footnote: 'Better algorithmic responses for enhanced content quality',
+                    footnote: 'Better responses from the Large Language Model',
                     negative: true,
                 },
-                {
-                    text: 'Priority support',
-                    negative: true,
-                },
+
             ],
             quota: 20,
+            planId: PLANS[1].planId
         },
         {
             plan: 'Standard',
             tagline: 'For heavy users who need more resources.',
-            price: 4.99,
+            price: 9.99,
             features: [
                 {
-                    text: '150 pages per PDF',
+                    text: '400 pages per PDF',
                     footnote: 'The maximum amount of pages per PDF file.',
                 },
                 {
@@ -86,21 +83,20 @@ const PricingPage = async () => {
                 },
                 {
                     text: 'Higher-quality responses',
-                    footnote: 'Better algorithmic responses for enhanced content quality',
+                    footnote: 'Better responses from the Large Language Model',
                 },
-                {
-                    text: 'Priority support',
-                },
+
             ],
             quota: 50,
+            planId: PLANS[2].planId
         },
         {
             plan: 'Premium',
             tagline: 'For power users or small groups.',
-            price: 9.99,
+            price: 19.99,
             features: [
                 {
-                    text: '450 pages per PDF',
+                    text: '1000 pages per PDF',
                     footnote: 'The maximum amount of pages per PDF file.',
                 },
                 {
@@ -112,13 +108,12 @@ const PricingPage = async () => {
                 },
                 {
                     text: 'Higher-quality responses',
-                    footnote: 'Better algorithmic responses for enhanced content quality',
+                    footnote: 'Better responses from the Large Language Model',
                 },
-                {
-                    text: 'Priority support',
-                },
+
             ],
-            quota: 100,
+            quota: 120,
+            planId: PLANS[3].planId
         },
     ];
 
@@ -134,7 +129,7 @@ const PricingPage = async () => {
 
                 <div className='pt-12 grid grid-cols-1 gap-10 lg:grid-cols-2'>
                     <TooltipProvider>
-                        {pricingItems.map(({ plan, price, tagline, features, quota }) => {
+                        {pricingItems.map(({ plan, price, tagline, features, quota, planId }) => {
 
 
                             return (<div key={plan} className={cn("relative rounded-2xl bg-white shadow-lg", {
@@ -211,10 +206,10 @@ const PricingPage = async () => {
                                         className: "w-full",
                                         variant: "secondary"
                                     })}>
-                                        {user ? "Continue for free" : "Sign up"}
+                                        {user ? "Subscribe for free" : "Sign up"}
                                         <ArrowRight className="h-5 w-5 ml-1.5" />
                                     </Link>) : user ? (
-                                        <SubscribeButton />
+                                        <SubscribeButton price={price} paypalPlanId={planId} />
                                     ) : (<Link href="/sign-in" className={buttonVariants({
                                         className: "w-full"
                                     })}>

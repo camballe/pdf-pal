@@ -15,10 +15,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @unique // matches clerk user id
-  email    String    @unique
-  Files    File[]
-  Messages Message[]
+  id                    String    @id @unique // matches clerk user id
+  email                 String    @unique
+  paypalSubscriptionId  String?
+  paypalNextBillingTime String?
+  paypalPlanId          String?
+  paypalPayerId         String?
+  Files                 File[]
+  Messages              Message[]
 }
 
 enum UploadStatus {
