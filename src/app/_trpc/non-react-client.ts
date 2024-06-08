@@ -4,7 +4,7 @@ import type { AppRouter } from "@/trpc";
 const nonReactTrpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: "/api/trpc",
+      url: "https://pdfpal.enkambale.com/api/trpc",
     }),
   ],
 });
