@@ -60,9 +60,9 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
                 <div className='flex flex-col items-center gap-2'>
                     <XCircle className="h-8 w-8 text-red-500" />
                     <h3 className='font-semibold text-xl'>PDF is too large!</h3>
-                    <p className='text-zinc-500 text-sm'>
+                    {/* <p className='text-zinc-500 text-sm'>
                         Your <span className='font-medium'>FREE</span>{' '}plan supports only up to 5 pages per PDF.
-                    </p>
+                    </p> */}
                     <Link href="/dashboard" className={buttonVariants({
                         variant: "secondary",
                         className: "mt-4"

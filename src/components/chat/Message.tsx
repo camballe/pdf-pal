@@ -57,7 +57,6 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
     }
 )
 
-// Adding display name for easier debugging
 Message.displayName = 'Message';
 
 export default Message

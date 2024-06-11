@@ -9,7 +9,7 @@ import { pinecone } from "@/lib/pinecone";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  pdfUploader: f({ pdf: { maxFileSize: "4MB" } })
+  pdfUploader: f({ pdf: { maxFileSize: "32MB" } })
     .middleware(async ({ req }) => {
       const user = await currentUser();
 
