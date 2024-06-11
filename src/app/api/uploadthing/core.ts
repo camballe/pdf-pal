@@ -35,7 +35,7 @@ export const ourFileRouter = {
         const loader = new PDFLoader(blob);
 
         const pageLevelDocs = await loader.load();
-        const numberOfPages = pageLevelDocs.length;
+        // const numberOfPages = pageLevelDocs.length;
 
         const pineconeIndex = pinecone.index("pdf-pal");
 
